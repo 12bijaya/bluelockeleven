@@ -79,15 +79,15 @@ img {
 }
 
 .nav-wrap {
-  width: min(1100px, 94%);
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   padding: 14px 0; /* tighter like screenshot */
   position: sticky;
   top: 0;
   z-index: 20;
-  background: linear-gradient(180deg, rgba(6, 7, 19, 0.9), rgba(6, 7, 19, 0.72));
+  background: linear-gradient(180deg, rgba(7, 16, 28, 0.95), rgba(10, 26, 44, 0.92));
   backdrop-filter: blur(6px);
-  border-bottom: 1px solid rgba(137, 224, 255, 0.08);
+  border-bottom: none;
 }
 
 /* extend a soft full-width strip so the bar feels continuous */
@@ -96,9 +96,9 @@ img {
   position: fixed;
   left: 0; right: 0; top: 0;
   height: 56px; /* continuous bar */
-  background: linear-gradient(180deg, rgba(6,7,19,0.9), rgba(6,7,19,0.72));
+  background: linear-gradient(180deg, rgba(7,16,28,0.95), rgba(10,26,44,0.92));
   backdrop-filter: blur(6px);
-  border-bottom: 1px solid rgba(137,224,255,0.08);
+  border-bottom: none;
   z-index: -1;
 }
 
@@ -108,6 +108,9 @@ nav {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0;
+  width: min(1100px, 94%);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .logo {
@@ -122,14 +125,18 @@ nav {
   height: 80px;
   border-radius: 50%;
   overflow: hidden;
-  box-shadow: 0 0 0 2px rgba(137,224,255,0.18), 0 0 18px rgba(35,167,255,0.22);
+  /* border should be the exact circumference of the visible logo */
+  border: 2px solid rgba(46,153,255,1);
+  box-shadow: none;
 }
 
 .logo-mark img {
-  width: 80px;
-  height: 80px;
+  width: 100%;
+  height: 100%;
+  display: block;
   border-radius: 50%;
-  box-shadow: none;
+  object-fit: cover; /* fill the circle */
+  transform: scale(1.12); /* crop away any transparent padding inside the PNG */
 }
 
 .brand {
@@ -141,14 +148,16 @@ nav {
 .brand .title {
   font-family: "Orbitron", sans-serif;
   letter-spacing: 2px;
-  color: #c9eeff;
-  font-size: 14px;
+  color: #dbf4ff;
+  font-size: 16px;
+  font-weight: 900;
 }
 
 .brand .subtitle {
   font-size: 11px;
   color: var(--muted);
   margin-top: 2px;
+  font-weight: 700;
 }
 
 .nav-links {
@@ -167,21 +176,21 @@ nav {
   border-radius: 8px;
   border: 1px solid transparent;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .nav-links a:hover {
   color: #fff;
-  background: rgba(137, 224, 255, 0.08);
-  border-color: rgba(137, 224, 255, 0.18);
+  background: rgba(46, 153, 255, 0.12);
+  border-color: rgba(46, 153, 255, 0.35);
   transform: translateY(-1px);
 }
 
 .nav-links a.active {
   color: #e6f3ff;
-  background: rgba(35, 167, 255, 0.08);
-  border-color: rgba(137, 224, 255, 0.22);
-  box-shadow: 0 0 0 1px rgba(137,224,255,0.22) inset;
+  background: rgba(46, 153, 255, 0.16);
+  border-color: rgba(46, 153, 255, 0.45);
+  box-shadow: 0 0 0 1px rgba(46,153,255,0.35) inset;
 }
 
 /* If no explicit active class is used, style the first item as highlighted */
