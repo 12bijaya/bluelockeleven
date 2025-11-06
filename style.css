@@ -81,25 +81,37 @@ img {
 .nav-wrap {
   width: 100%;
   margin: 0;
-  padding: 14px 0; /* tighter like screenshot */
+  padding: 16px 0;
   position: sticky;
   top: 0;
   z-index: 20;
-  background: linear-gradient(180deg, rgba(7, 16, 28, 0.95), rgba(10, 26, 44, 0.92));
-  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(7, 16, 28, 0.98), rgba(10, 26, 44, 0.95));
+  backdrop-filter: blur(12px) saturate(180%);
   border-bottom: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 40px rgba(35, 167, 255, 0.08);
+  transition: all 0.3s ease;
 }
 
-/* extend a soft full-width strip so the bar feels continuous */
 .nav-wrap::before {
   content: "";
-  position: fixed;
-  left: 0; right: 0; top: 0;
-  height: 56px; /* continuous bar */
-  background: linear-gradient(180deg, rgba(7,16,28,0.95), rgba(10,26,44,0.92));
-  backdrop-filter: blur(6px);
-  border-bottom: none;
-  z-index: -1;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%,
+    rgba(35, 167, 255, 0.03) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: shimmer 8s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.nav-wrap::after {
+  display: none;
 }
 
 /* ============ NAVBAR ============ */
@@ -111,23 +123,80 @@ nav {
   width: min(1100px, 94%);
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   cursor: pointer;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.logo:hover {
+  transform: translateY(-2px);
 }
 
 .logo-mark {
   width: 80px;
   height: 80px;
+  min-width: 80px;
+  min-height: 80px;
+  aspect-ratio: 1 / 1;
   border-radius: 50%;
   overflow: hidden;
-  /* border should be the exact circumference of the visible logo */
-  border: 2px solid rgba(46,153,255,1);
-  box-shadow: none;
+  position: relative;
+  border: 2.5px solid rgba(35, 167, 255, 0.8);
+  box-shadow: 
+    0 0 20px rgba(35, 167, 255, 0.4),
+    0 0 40px rgba(137, 224, 255, 0.2),
+    inset 0 0 20px rgba(35, 167, 255, 0.1);
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, rgba(35, 167, 255, 0.1), rgba(137, 224, 255, 0.05));
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-mark::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    rgba(35, 167, 255, 0.6),
+    rgba(137, 224, 255, 0.4),
+    rgba(35, 167, 255, 0.6)
+  );
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: rotate-border 3s linear infinite;
+}
+
+@keyframes rotate-border {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.logo:hover .logo-mark::before {
+  opacity: 1;
+}
+
+.logo:hover .logo-mark {
+  border-color: rgba(137, 224, 255, 1);
+  box-shadow: 
+    0 0 30px rgba(35, 167, 255, 0.6),
+    0 0 60px rgba(137, 224, 255, 0.3),
+    inset 0 0 30px rgba(35, 167, 255, 0.15);
+  transform: scale(1.05);
 }
 
 .logo-mark img {
@@ -135,70 +204,159 @@ nav {
   height: 100%;
   display: block;
   border-radius: 50%;
-  object-fit: cover; /* fill the circle */
-  transform: scale(1.12); /* crop away any transparent padding inside the PNG */
+  object-fit: cover;
+  object-position: center center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  margin: 0;
+  padding: 0;
 }
 
 .brand {
   display: flex;
   flex-direction: column;
-  line-height: 1;
+  line-height: 1.2;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover .brand {
+  transform: translateX(2px);
 }
 
 .brand .title {
   font-family: "Orbitron", sans-serif;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
   color: #dbf4ff;
   font-size: 16px;
   font-weight: 900;
+  text-shadow: 
+    0 0 10px rgba(35, 167, 255, 0.4),
+    0 0 20px rgba(137, 224, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.logo:hover .brand .title {
+  color: #ffffff;
+  text-shadow: 
+    0 0 15px rgba(35, 167, 255, 0.6),
+    0 0 30px rgba(137, 224, 255, 0.3);
 }
 
 .brand .subtitle {
   font-size: 11px;
   color: var(--muted);
-  margin-top: 2px;
+  margin-top: 3px;
   font-weight: 700;
+  letter-spacing: 1px;
+  transition: color 0.3s ease;
+}
+
+.logo:hover .brand .subtitle {
+  color: rgba(137, 224, 255, 0.9);
 }
 
 .nav-links {
   display: flex;
-  gap: 14px;
+  gap: 10px;
   font-size: 13px;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .nav-links a {
   text-decoration: none;
-  color: rgba(255, 255, 255, 0.78);
+  color: rgba(255, 255, 255, 0.85);
   display: inline-flex;
   align-items: center;
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-  font-weight: 700;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(137, 224, 255, 0.15);
+  background: rgba(35, 167, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+}
+
+.nav-links a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(35, 167, 255, 0.2),
+    rgba(137, 224, 255, 0.15)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent,
+    rgba(137, 224, 255, 0.8),
+    transparent
+  );
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
 }
 
 .nav-links a:hover {
-  color: #fff;
-  background: rgba(46, 153, 255, 0.12);
-  border-color: rgba(46, 153, 255, 0.35);
-  transform: translateY(-1px);
+  color: #ffffff;
+  border-color: rgba(137, 224, 255, 0.4);
+  background: rgba(35, 167, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 4px 12px rgba(35, 167, 255, 0.2),
+    0 0 20px rgba(137, 224, 255, 0.15),
+    inset 0 0 20px rgba(35, 167, 255, 0.1);
+}
+
+.nav-links a:hover::before {
+  opacity: 1;
+}
+
+.nav-links a:hover::after {
+  width: 80%;
 }
 
 .nav-links a.active {
-  color: #e6f3ff;
-  background: rgba(46, 153, 255, 0.16);
-  border-color: rgba(46, 153, 255, 0.45);
-  box-shadow: 0 0 0 1px rgba(46,153,255,0.35) inset;
+  color: #ffffff;
+  background: linear-gradient(135deg, 
+    rgba(35, 167, 255, 0.25),
+    rgba(137, 224, 255, 0.15)
+  );
+  border-color: rgba(137, 224, 255, 0.5);
+  box-shadow: 
+    0 0 20px rgba(35, 167, 255, 0.3),
+    inset 0 0 20px rgba(35, 167, 255, 0.1),
+    0 4px 12px rgba(35, 167, 255, 0.2);
+}
+
+.nav-links a.active::after {
+  width: 80%;
 }
 
 /* If no explicit active class is used, style the first item as highlighted */
 .nav-links a:first-child:not(.active) {
-  color: #e6f3ff;
-  background: rgba(35, 167, 255, 0.08);
-  border-color: rgba(137, 224, 255, 0.22);
-  box-shadow: 0 0 0 1px rgba(137,224,255,0.22) inset;
+  color: rgba(219, 244, 255, 0.95);
+  background: rgba(35, 167, 255, 0.1);
+  border-color: rgba(137, 224, 255, 0.25);
+  box-shadow: 
+    0 0 15px rgba(35, 167, 255, 0.15),
+    inset 0 0 15px rgba(35, 167, 255, 0.05);
 }
 
 /* ============ HERO ============ */
@@ -388,25 +546,21 @@ h2.section-title::after {
   position: absolute;
   inset: -18px -22px;
   border-radius: 18px;
-  background: linear-gradient(180deg, rgba(5,8,14,0.65), rgba(5,8,14,0.5));
-  border: 1px solid rgba(137,224,255,0.12);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-  backdrop-filter: blur(4px);
+  background: rgba(5, 8, 14, 0.92);
+  border: 1px solid rgba(137, 224, 255, 0.4);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45), 0 0 16px rgba(35, 167, 255, 0.08);
+  backdrop-filter: blur(6px);
   z-index: -1;
 }
 
 /* ============ TEAM ============ */
 .team-section {
-  background: radial-gradient(circle at center, #05070b, #0b0f18);
+  background: transparent;
   position: relative;
 }
 
 .team-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(60% 40% at 50% 0%, rgba(0,209,255,0.06), transparent 60%);
-  pointer-events: none;
+  display: none;
 }
 
 .formation {
@@ -424,13 +578,12 @@ h2.section-title::after {
   position: absolute;
   inset: -18px -22px;
   border-radius: 18px;
-  background:
-    linear-gradient(180deg, rgba(5,8,14,0.58), rgba(5,8,14,0.48)),
-    url('1137.jpg') center/cover no-repeat;
-  border: 1px solid rgba(137,224,255,0.10);
+  background: url('1137.jpg') center/cover no-repeat;
+  border: 1px solid rgba(137,224,255,0.14);
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(2px);
   z-index: -1;
+  opacity: 0.6;
 }
 
 .manager-row,
@@ -626,3 +779,435 @@ footer .footer-inner strong { color: #ffffff !important; }
 }
 
 .socials a:hover { color: #ffffff; text-shadow: 0 0 8px rgba(137,224,255,0.6); }
+
+/* ============ RESPONSIVE DESIGN ============ */
+
+/* Mobile Menu Toggle Button */
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: rgba(35, 167, 255, 0.1);
+  border: 1px solid rgba(137, 224, 255, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 25;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-menu-toggle:hover {
+  background: rgba(35, 167, 255, 0.2);
+  border-color: rgba(137, 224, 255, 0.4);
+  box-shadow: 0 0 15px rgba(35, 167, 255, 0.3);
+}
+
+.mobile-menu-toggle span {
+  width: 25px;
+  height: 2.5px;
+  background: var(--neon);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(35, 167, 255, 0.5);
+}
+
+.mobile-menu-toggle.active {
+  background: rgba(35, 167, 255, 0.25);
+  border-color: rgba(137, 224, 255, 0.5);
+}
+
+.mobile-menu-toggle.active span {
+  background: rgba(137, 224, 255, 1);
+  box-shadow: 0 0 12px rgba(137, 224, 255, 0.7);
+}
+
+.mobile-menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(8px, 8px);
+}
+
+.mobile-menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.mobile-menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Tablet Styles (768px - 1024px) */
+@media (max-width: 1024px) {
+  .wrap {
+    width: min(900px, 92%);
+  }
+
+  nav {
+    width: min(900px, 92%);
+  }
+
+  .ble-mark {
+    font-size: 110px;
+  }
+
+  .hero-desc {
+    max-width: 90%;
+    font-size: 15px;
+  }
+
+  .ble-card {
+    width: 200px;
+    height: 280px;
+  }
+
+  .formation {
+    gap: 50px;
+  }
+}
+
+/* Mobile Styles (up to 768px) */
+@media (max-width: 768px) {
+  .wrap {
+    width: min(600px, 92%);
+    padding: 0 16px;
+  }
+
+  /* Navigation Mobile */
+  nav {
+    width: 100%;
+    padding: 0 16px;
+    overflow: visible;
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    margin-top: 0;
+    background: linear-gradient(180deg, rgba(7, 16, 28, 0.98), rgba(10, 26, 44, 0.95));
+    backdrop-filter: blur(12px) saturate(180%);
+    flex-direction: column;
+    padding-top: calc(16px + 60px + 16px + 2px);
+    padding-bottom: 20px;
+    padding-left: 16px;
+    padding-right: 16px;
+    gap: 10px;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 1px solid rgba(137, 224, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 40px rgba(35, 167, 255, 0.1);
+    z-index: 21;
+    max-height: 100vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-links::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, 
+      rgba(35, 167, 255, 0.03),
+      transparent 50%,
+      rgba(137, 224, 255, 0.02)
+    );
+    pointer-events: none;
+  }
+
+  .nav-links.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-links a {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    padding: 14px 20px;
+  }
+
+  .logo-mark {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    min-width: 60px;
+    min-height: 60px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .logo-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 50%;
+  }
+
+  .brand .title {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+  }
+
+  .brand .subtitle {
+    font-size: 10px;
+  }
+
+  /* Hero Mobile */
+  header.hero {
+    padding: 40px 0 60px;
+    min-height: 400px;
+  }
+
+  .ble-mark {
+    font-size: 72px;
+    -webkit-text-stroke: 2px var(--neon);
+  }
+
+  .hero-sub {
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    margin-top: 8px;
+  }
+
+  .hero-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 0 16px;
+    margin-top: 12px;
+  }
+
+  .cta {
+    padding: 10px 20px;
+    font-size: 13px;
+    margin-top: 24px;
+  }
+
+  .silhouette {
+    height: 300px;
+    top: 50px;
+  }
+
+  /* Section Mobile */
+  section {
+    padding: 40px 0;
+  }
+
+  h2.section-title {
+    font-size: 24px;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  h2.section-title::after {
+    width: 120px;
+    height: 2px;
+  }
+
+  /* About Mobile */
+  #about p {
+    font-size: 15px;
+    line-height: 1.75;
+    padding: 0 16px;
+  }
+
+  #about .wrap::before,
+  #team .wrap::before,
+  #achievements .wrap::before {
+    inset: -12px -16px;
+    border-radius: 14px;
+  }
+
+  /* Team Mobile */
+  .formation {
+    gap: 40px;
+  }
+
+  .manager-row,
+  .captain-row,
+  .player-row {
+    margin: -40px;
+    gap: 20px;
+  }
+
+  .ble-card {
+    width: 160px;
+    height: 220px;
+  }
+
+  .player-photo {
+    width: 65px;
+    height: 65px;
+    top: 60px;
+  }
+
+  .player-info {
+    bottom: 60px;
+  }
+
+  .player-info h3 {
+    font-size: 13px;
+  }
+
+  .player-info p {
+    font-size: 11px;
+  }
+
+  .manager {
+    transform: scale(1.1);
+  }
+
+  .captain {
+    transform: scale(1.05);
+  }
+
+  /* Achievements Mobile */
+  .ach-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .ach-card {
+    padding: 16px;
+  }
+
+  /* Footer Mobile */
+  footer {
+    padding: 24px 0;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    padding: 20px 16px;
+  }
+
+  .socials {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .socials a {
+    margin-left: 0;
+  }
+}
+
+/* Small Mobile Styles (up to 480px) */
+@media (max-width: 480px) {
+  .wrap {
+    width: 95%;
+    padding: 0 12px;
+  }
+
+  nav {
+    padding: 0 12px;
+  }
+
+  .logo-mark {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    min-width: 50px;
+    min-height: 50px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .logo-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 50%;
+  }
+
+  .brand .title {
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .brand .subtitle {
+    font-size: 9px;
+  }
+
+  header.hero {
+    padding: 30px 0 50px;
+    min-height: 350px;
+  }
+
+  .ble-mark {
+    font-size: 56px;
+    -webkit-text-stroke: 1.5px var(--neon);
+  }
+
+  .hero-sub {
+    font-size: 12px;
+  }
+
+  .hero-desc {
+    font-size: 13px;
+    padding: 0 12px;
+  }
+
+  .cta {
+    padding: 9px 18px;
+    font-size: 12px;
+  }
+
+  section {
+    padding: 30px 0;
+  }
+
+  h2.section-title {
+    font-size: 20px;
+    letter-spacing: 1.5px;
+  }
+
+  #about p {
+    font-size: 14px;
+    padding: 0 12px;
+  }
+
+  .ble-card {
+    width: 140px;
+    height: 190px;
+  }
+
+  .player-photo {
+    width: 55px;
+    height: 55px;
+    top: 50px;
+  }
+
+  .player-info {
+    bottom: 50px;
+  }
+
+  .player-info h3 {
+    font-size: 12px;
+  }
+
+  .player-info p {
+    font-size: 10px;
+  }
+
+  .formation {
+    gap: 30px;
+  }
+
+  .manager-row,
+  .captain-row,
+  .player-row {
+    margin: -30px;
+    gap: 16px;
+  }
+}
